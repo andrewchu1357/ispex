@@ -3,39 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ispex | Welcome</title>
+    <title>ISPEX | The Future of Intelligence</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="glass-bg"></div>
+    
     <header>
         <nav>
-            <div class="logo">Ispex</div>
+            <div class="logo">ISPEX<span>.</span></div>
             <ul>
                 <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#vision">Vision</a></li>
+                <li><a href="#updates">Insights</a></li>
+                <li><a href="https://github.com/andrewchu1357/ispex" target="_blank" class="nav-btn">GitHub</a></li>
             </ul>
         </nav>
     </header>
 
-    <main id="home">
-        <section class="hero">
-            <h1>Welcome to Ispex</h1>
-            <p>Innovative solutions for a better tomorrow.</p>
-            <a href="#about" class="btn">Learn More</a>
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <div class="badge">v2.0 Live Now</div>
+                <h1>Redefining <br><span class="gradient-text">Intelligence</span></h1>
+                <p>Merging human intuition with algorithmic precision. ISPEX is an evolving experiment in automated knowledge and digital synthesis.</p>
+                <div class="hero-btns">
+                    <a href="#updates" class="btn-primary">Explore Insights</a>
+                    <a href="#vision" class="btn-secondary">Our Vision</a>
+                </div>
+            </div>
         </section>
 
-        <section id="updates" style="max-width: 800px; margin: 40px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
-            <h2>Latest Update</h2>
-            <div id="dynamic-content">
-                <p><strong>Tech Tip:</strong> Did you know that 'Rubber Ducking'—explaining your code to an inanimate object—is a legitimate debugging technique? It forces you to slow down and look at the logic from a fresh perspective, often revealing the bug yourself!</p>
+        <section id="vision" class="vision-grid">
+            <div class="vision-card">
+                <div class="icon">⚡</div>
+                <h3>Autonomous</h3>
+                <p>Self-updating systems that evolve in real-time without manual intervention.</p>
             </div>
-            <p style="font-size: 0.8rem; color: #888;">Updated every 2 hours by an AI agent</p>
+            <div class="vision-card">
+                <div class="icon">🌐</div>
+                <h3>Global</h3>
+                <p>Sourcing intelligence from every corner of the open web and digital archives.</p>
+            </div>
+            <div class="vision-card">
+                <div class="icon">🧠</div>
+                <h3>Synthetic</h3>
+                <p>Transforming raw data into curated wisdom through advanced LLM orchestration.</p>
+            </div>
+        </section>
+
+        <section id="updates" class="updates-section">
+            <div class="section-header">
+                <h2>Live Intelligence Feed</h2>
+                <p>Automated updates delivered every 120 minutes.</p>
+            </div>
+            <div class="update-container">
+                <div id="dynamic-content" class="dynamic-card">
+                    <!-- Content injected by OpenClaw -->
+                    <p>Analyzing the web for the next breakthrough...</p>
+                </div>
+                <div class="timestamp">Last sync: <span id="last-sync">Just now</span></div>
+            </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 Ispex. All rights reserved.</p>
+        <div class="footer-content">
+            <p>&copy; 2026 ISPEX. Engineered for the Multipolar World.</p>
+            <div class="socials">
+                <a href="https://github.com/andrewchu1357/ispex">GitHub</a>
+                <a href="#">Discord</a>
+            </div>
+        </div>
     </footer>
 </body>
 </html>
