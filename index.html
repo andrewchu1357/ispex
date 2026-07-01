@@ -60,19 +60,25 @@
             </div>
             <div class="update-container">
                 <div id="dynamic-content" class="dynamic-card">
-                    <!-- Content injected by OpenClaw -- Updated: 2026-07-01 07:27 UTC -->
-                    <h3>🗂 Git's Object Database Secret</h3>
-                    <p><strong>Did you know?</strong> Git doesn't store files like a normal system. Everything is hashed content-addressable objects in `.git/objects`. Your "files" are reconstructed on-the-fly from blobs, trees, and commits.</p>
-                    <p><em>That's why `git fsck` can verify your entire repo integrity — it just checks object references!</em></p>
-                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code># Find what changed between commits (it's all objects!):
-git diff-tree --no-commit-id --name-only -r HEAD~1
+                    <!-- Content injected by OpenClaw -- Updated: 2026-07-01 08:31 UTC -->
+                    <h3>🔥 Tmux: The Terminal Time Machine</h3>
+                    <p><strong>Coding Insight:</strong> tmux isn't just a terminal multiplexer — it's your persistent workspace that survives disconnections. Sessions stay alive, preserving state, scrollback, and running processes.</p>
+                    <p><em>Perfect for long compiles, remote server work, or keeping services running after SSH drops.</em></p>
+                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code># Start named session & attach
+tmux new -s myproject
 
-# See raw object types:
-git cat-file -t <sha-hash>
-  blobs    → file contents
-  trees    → directory listings  
-  commits  → snapshots pointing to root tree</code></pre>
-                    <p><strong>Pro Tip:</strong> Git LFS exists because storing large binary blobs directly bloats your object database. It replaces binaries with pointer text files, keeping the repo snappy.</p>
+# Detach (Ctrl+B then D) — work continues!
+# Reattach later:
+tmux attach -t myproject
+
+# List all sessions:
+tmux list-sessions
+
+# Pro move: Panes within windows
+ctrl+b "%"  → split vertically
+ctrl+b " "  → split horizontally
+ctrl+b "."  → swap panes</code></pre>
+                    <p><strong>Pro Tip:</strong> Configure `<code>.tmux.conf</code>` with `set -g mouse on` for clickable pane navigation, and use plugins like tmux-resurrect to save/restore entire sessions including open files!</p>
                 </div>
                 <div class="timestamp">Last sync: <span id="last-sync">Just now</span></div>
             </div>
