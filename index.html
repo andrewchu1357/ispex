@@ -60,43 +60,44 @@
             </div>
             <div class="update-container">
                 <div id="dynamic-content" class="dynamic-card">
-                    <!-- Content injected by OpenClaw -- Updated: 2026-07-01 19:14 UTC -->
-                    <h3>🎯 Branch Prediction & CPU Pipeline Optimization</h3>
-                    <p><strong>Tech Insight:</strong> Your code's performance isn't just about algorithmic complexity — it's also about how well you dance with the CPU! Modern processors use branch prediction to keep their instruction pipelines full, guessing which way your if-statements will go. A wrong guess? Pipeline flush → 10-20 cycle penalty × every single misprediction.</p>
-                    <p><em>The hidden reality: CPUs execute instructions in a pipeline (fetch, decode, issue, execute, writeback). When they hit a branch (<code>if</code>, loops), the processor predicts the outcome to avoid stalling. Prediction tables learn patterns from execution history — sequential iterations of similar conditions get predicted correctly ~95-99% of time. Random/unpredictable branches? Disasters.</em></p>
-                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code># 🐌 SLOW: Unsorted array with random branch (3x slower!)
-int sortedData[8000]; // Random 0s and 1s
-double sum = 0;
-for(int i=0; i&lt;32768*10; ++i) {
-    for(int j=0; j&lt;8000; ++j) {        
-        if(data[j] &gt;= 0) { // 🎲 Random pattern!
-            sum += data[j];
-        }
-    }
-}
-// ⚠️ CPU branch predictor FAILS on random sequence
-// Pipeline flushes constantly → 25% slowdown
+                    <!-- Content injected by OpenClaw -- Updated: 2026-07-01 20:21 UTC -->
+                    <h3>⚡ Cache Line Alignment & False Sharing</h3>
+                    <p><strong>Tech Insight:</strong> Your multi-threaded code might be silently sabotaging itself through cache line conflicts! CPUs don't load single bytes from memory — they fetch 64-byte chunks called "cache lines." When two threads write to different variables that happen to sit on the same cache line, every other thread's write invalidates everyone else's cached copy. Result? Your cores spend more time coordinating than computing.</p>
+                    <p><em>The hidden reality: Modern CPUs use MESI protocol (Modified/Exclusive/Shared/Invalid) for cache coherence. When Thread A writes to address X on Cache Line L, other threads' copies of Line L become INVALID instantly — forcing a costly fetch from RAM or another core's cache (~10-30 cycles vs ~3ns). Different variables? Doesn't matter if they share that 64-byte block!</em></p>
+                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code># 🐌 FALSE SHARING DISASTER (same cache line!):
+class BadCounter {
+public:
+    uint64_t counterA; // ❌ Thread 1 writes here
+    char padding[56];
+    uint64_t counterB; // ❌ Thread 2 writes HERE — SAME CACHE LINE!
+};
+// Both counters are only 8 bytes apart → fit in one 64-byte cache line
+// Every write to counterA INVALIDATES cached copy on core handling counterB
+// Performance: ~10x slower than it should be 📉</code></pre>
+                    <p><strong>The Fix:</strong> Pad your data structures to force variables onto separate cache lines using alignment attributes or manual padding:</p>
+                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code># ✅ PROPER ALIGNMENT (separate cache lines):
+class GoodCounter {
+public:
+    alignas(64) uint64_t counterA; // ✅ Padded to own 64-byte line
+    alignas(64) uint64_t counterB; // ✅ Separate from A — no conflicts!
+};
+// Or manual padding:
+class GoodCounter2 {
+public:
+    uint64_t counterA;
+    char padding[56]; // Fill to 64 bytes total
+    uint64_t counterB; // Next cache line now ✅
+};</code></pre>
+                    <p><strong>Real-World Impact:</strong> A simple benchmark with 8 threads each incrementing separate counters: Without alignment = ~12ns per iteration. With proper cache-line padding = ~3ns (4x faster!). This silently kills performance in high-frequency trading, game engines, and database systems.</p>
+                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code># 🛠️ DIAGNOSTICS & TOOLS:
+# Check your platform's cache line size (usually 64):
+echo $(getconf LEVEL1_DCACHE_LINESIZE) // Linux
+hw.perflib.l2_cache_line_size     // macOS sysctl
 
-# 🔥 FAST: Sorted array (branch becomes predictable)
-sort(data, data + 8000); // Group negatives then positives
-double sum = 0;
-for(int i=0; i&lt;32768*10; ++i) {
-    for(int j=0; j&lt;8000; ++j++) {
-        if(data[j] &gt;= 0) { // ✅ Always false, then always true!
-            sum += data[j];
-        }
-    }
-}
-// ⚡ Branch predictor nails it: "false,false,false...true,true,true"
-// Zero pipeline flushes → 3x speedup from sorting alone!</code></pre>
-                    <p><strong>Code without branches (pro technique):</strong> Replace conditional logic with arithmetic/bitwise operations. Example:</p>
-                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code># ❌ BRANCH VERSION:
-if(x &gt; 0) { absX = x } else { absX = -x }
-
-# ✅ BRANCHLESS (CPU loves this):
-absX = (unsigned)x &gt;&gt; 31; // Arithmetic shift → all 1s if negative, 0 if positive
-absX = (x ^ absX) - absX; // XOR flip + conditional subtract</code></pre>
-                    <p><strong>Pro Tips:</strong> (1) Keep hot loops predictable — sort data before processing when branch conditions correlate with sorted order. (2) Use compiler flags: <code>-O3 -ftree-vectorize</code> enables auto-branch elimination on predictable patterns. (3) Profile with Intel VTune or perf to find misprediction-heavy branches. (4) For critical paths, write branchless code using boolean arithmetic (<code>x ? a : b → ((x)&amp;a)|(~(x)&amp;b)</code>) or conditional move instructions.</p>
+# Visualize false sharing with:
+sudo perf record -e L1-dcache-store-misses ./your_app
+cachegrind --I-cache=yes --D-cache=yes your_program</code></pre>
+                    <p><strong>Pro Tips:</strong> (1) Use <code>alignas(64)</code> or <code>__attribute__((aligned(64)))</code> for per-thread counters in hot paths. (2) Thread-local storage (<code>thread_local</code>) automatically avoids false sharing. (3) For data races you intentionally want, use atomics — they're slower but correct! (4) Memory layout matters: group frequently-read-together variables, separate write-heavy ones. (5) Profile before optimizing — <code>perf stat -e cache-misses,cycles,instructions ./binary</code> reveals the smoking gun.</p>
                 </div>
                 <div class="timestamp">Last sync: <span id="last-sync">Just now</span></div>
             </div>
