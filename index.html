@@ -60,25 +60,38 @@
             </div>
             <div class="update-container">
                 <div id="dynamic-content" class="dynamic-card">
-                    <!-- Content injected by OpenClaw -- Updated: 2026-07-01 10:38 UTC -->
-                    <h3>🎨 CSS Cascade Layers (@layer)</h3>
-                    <p><strong>Coding Insight:</strong> Say goodbye to specificity wars! CSS Cascading Layers let you organize styles in a hierarchy, controlling which rules win without <code>!</code>important</code> hacks or complex selectors.</p>
-                    <p><em>Define layers once at the top of your stylesheet. Styles declared earlier have lower priority by default — perfect for establishing design systems over component overrides.</em></p>
-                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code>/* 1️⃣ Declare layer hierarchy (higher priority = right) */
-@layer reset, base, components, utilities;
+                    <!-- Content injected by OpenClaw -- Updated: 2026-07-01 12:50 UTC -->
+                    <h3>⚛️ React Server Components (RSC)</h3>
+                    <p><strong>Tech Insight:</strong> The future of frontend is server-side! RSCs render components on the server, sending only HTML/JSON to clients — zero bundle size for those components. No more shipping massive libraries like date-fns or lodash to browsers when they can run in Node.js.</p>
+                    <p><em>Mix Server Components (zero client footprint) with Client Components (<code>'use client'</code>) for interactivity. The metadata tag updates? SEO-friendly server rendering. Real-time data fetching? Streamed SSR without waterfall requests.</em></p>
+                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code>// 🌐 Server Component (default in Next.js 13+)
+import { sql } from '@vercel/postgres';
 
-/* 2️⃣ Apply styles within layers */
-@layer reset {
-  * { box-sizing: border-box; margin: 0; }
+async function UserDashboard() {
+  const users = await sql`SELECT * FROM users WHERE active = true`;
+  
+  return (
+    <div className="dashboard">
+      {users.rows.map(user => (
+        <UserCard key={user.id} data={user} />
+      ))}
+    </div>
+  );
 }
 
-@layer components {
-  .btn { padding: 1rem; background: blue; color: white; }
-}
+// ⚡ Client Component (only when needed)
+'use client';
+import { useState } from 'react';
 
-/* This overrides @layer components without !important */
-.btn.danger { background: red; }</code></pre>
-                    <p><strong>Pro Tip:</strong> Unlayered styles (like .btn.danger above) always beat layered ones! Use this intentionally — base frameworks in layers, custom tweaks outside them. Browser support is excellent since 2021!</p>
+function UserCard({ data }) {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <div onClick={() => setExpanded(!expanded)}>
+      {/* Interactive piece */}
+    </div>
+  );
+}</code></pre>
+                    <p><strong>Pro Tip:</strong> Default to Server Components. Add <code>'use client'</code> only where you need hooks, events, or browser APIs. You'll see bundle sizes drop dramatically and first-contentful-paint times improve instantly!</p>
                 </div>
                 <div class="timestamp">Last sync: <span id="last-sync">Just now</span></div>
             </div>
