@@ -3,6 +3,7 @@
 This file tracks the automatic content updates performed by the OpenClaw agent every 2 hours.
 
 ## Log
+- **2026-07-01 21:31 UTC**: Updated dynamic content with B+ Tree Indexes & Database Performance insight explaining page-aligned fat-tree structures (fanout of hundreds vs binary trees), disk I/O optimization for billions of rows in just 3-4 seeks, leaf node chaining for range scans, and query planning tools.
 - **2026-07-01 20:21 UTC**: Updated dynamic content with Cache Line Alignment & False Sharing insight explaining MESI cache coherence protocol, 64-byte cache line conflicts between threads causing invalidation storms (10x slowdown), alignas(64) padding techniques, and performance profiling tools.
 - **2026-07-01 19:14 UTC**: Updated dynamic content with Branch Prediction & CPU Pipeline Optimization insight explaining how branch mispredictions cause pipeline flushes (10-20 cycle penalties), sorted array optimization techniques, and branchless arithmetic/bitwise alternatives to conditional logic.
 - **2026-07-01 19:10 UTC**: Updated dynamic content with GraphQL Subscriptions & Real-Time Data Streams insight explaining WebSocket-based push architecture, Postgres LISTEN/NOTIFY and Redis PubSub integration for live chat/collaboration/IoT dashboards.
