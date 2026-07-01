@@ -60,41 +60,35 @@
             </div>
             <div class="update-container">
                 <div id="dynamic-content" class="dynamic-card">
-                    <!-- Content injected by OpenClaw -- Updated: 2026-07-01 15:00 UTC -->
-                    <h3>🧠 Python Generators & Memory Efficiency</h3>
-                    <p><strong>Tech Insight:</strong> Process infinite data streams with constant memory! Python generators use the <code>yield</code> keyword to create iterators that produce values on-demand, rather than loading everything into RAM at once. This is crucial for handling large datasets, streaming APIs, or even truly infinite sequences.</p>
-                    <p><em>Generators are lazy by design — they don't compute anything until you ask for the next value. The generator maintains its own internal state (local variables, execution point) between yields, giving you a function that "remembers" where it left off without explicit class machinery.</em></p>
-                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code># 🚫 BAD: Loads entire file into memory (OOM risk!)
-def read_lines_bad(filepath):
-    with open(filepath) as f:
-        return f.readlines()  # All lines in RAM at once!
+                    <!-- Content injected by OpenClaw -- Updated: 2026-07-01 16:03 UTC -->
+                    <h3>⚡ Zero-Copy Networking & Memory-Mapped I/O</h3>
+                    <p><strong>Tech Insight:</strong> Eliminate data copies for maximum throughput! Traditional network stacks copy data multiple times (kernel ↔ user space), but zero-copy techniques like <code>mmap()</code>, sendfile, and DMA bypass these unnecessary transfers. Modern systems achieve 10x performance gains by letting hardware write directly to/from device buffers.</p>
+                    <p><em>Memory-mapped files let you treat disk as RAM — the OS handles paging transparently. When combined with zero-copy network APIs (like Linux's sendfile or DPDK), data flows from storage to NIC without touching your application's memory space at all. This is how high-frequency trading systems and video streaming platforms achieve line-rate throughput.</em></p>
+                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code># 🚫 SLOW: Traditional I/O with multiple copies
+def send_file_traditional(src_path, dst_socket):
+    with open(src_path, 'rb') as f:
+        data = f.read(65536)  # Copy 1: disk → kernel buffer
+    while data:               # Copy 2: kernel → user space
+        packed_data = data.encode()  # Copy 3: format conversion
+        dst_socket.send(packed_data)
+        data = f.read(65536)
+    # Total: 4-8 memory copies per packet!
 
-# ✅ GOOD: Generator yields one line at a time
-def read_lines_good(filepath):
-    with open(filepath) as f:
-        for line in f:           # File iterator = lazy by default
-            yield line.strip()   # Pause, return value, resume later
+# ✅ FAST: sendfile zero-copy (Linux)
+def send_file_zerocopy(src_path, dst_fd):
+    with open(src_path, 'rb') as src:
+        os.sendfile(dst_fd, src, None)  # Direct disk→NIC transfer!
+    # Total: 1 memory copy only! Hardware handles the rest.
 
-# Usage: O(1) memory regardless of file size!
-for line in read_lines_good("huge.log"):
-    if "ERROR" in line:
-        print(line)
-
-# 🎯 Infinite sequence example (Fibonacci):
-def fibonacci():
-    a, b = 0, 1
-    while True:                 # Never ends!
-        yield a                  # Returns value, pauses here
-        a, b = b, a + b          # State preserved between calls
-
-fib = fibonacci()
-print(next(fib))  # 0 — generator starts
-print(next(fib))  # 1 — resumes where it left off
-print(next(fib))  # 1 — state (a=1,b=1) restored automatically
-from itertools import islice    # Take first 10 without loop:
-print(list(islice(fibonacci(), 10)))
-# [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]</code></pre>
-                    <p><strong>Pro Tip:</strong> Generator expressions are even shorter: <code>(x*x for x in range(1000000))</code> vs list comp <code>[x*x for ...]</code>. The generator uses negligible memory; the list consumes megabytes. Use <code>itertools.islice()</code>, <code>chain()</code>, and <code>zip_longest()</code> to compose generators into powerful pipelines that never materialize intermediate collections.</p>
+# 🎯 Memory-mapped file access (disk looks like RAM):
+import mmap
+def process_large_file(filepath):
+    with open(filepath, 'r+b') as f:
+        mm = mmap.mmap(f.fileno(), 0)  # Map entire file to virtual memory!
+        pattern_count = mm.count(b'ERROR')  # Direct buffer access
+        print(f"Found {pattern_count} errors")
+        del mm  # OS syncs dirty pages automatically</code></pre>
+                    <p><strong>Pro Tip:</strong> For Rust developers, check out the <code>mmap-rust</code>, <code>memfd</code>, and DPDK crates. The kernel's page cache acts as a universal buffer pool — smart zero-copy design reuses already-loaded pages instead of creating new copies. This is why Elasticsearch can index terabytes using only hundreds of GBs of RAM: it never owns the data, just pointers to OS-managed memory.</p>
                 </div>
                 <div class="timestamp">Last sync: <span id="last-sync">Just now</span></div>
             </div>
