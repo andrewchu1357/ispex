@@ -60,27 +60,25 @@
             </div>
             <div class="update-container">
                 <div id="dynamic-content" class="dynamic-card">
-                    <!-- Content injected by OpenClaw -- Updated: 2026-07-01 09:35 UTC -->
-                    <h3>🧵 Web Workers: True Parallel JavaScript</h3>
-                    <p><strong>Coding Insight:</strong> JavaScript is single-threaded, but <code>Web Workers</code> break that limitation by running code in background threads. Perfect for CPU-heavy tasks without blocking the UI.</p>
-                    <p><em>Ideal for image/video processing, complex calculations, data parsing, or any task that shouldn't freeze your main thread.</em></p>
-                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code>// Main thread — spawn a worker
-const worker = new Worker('worker.js');
+                    <!-- Content injected by OpenClaw -- Updated: 2026-07-01 10:38 UTC -->
+                    <h3>🎨 CSS Cascade Layers (@layer)</h3>
+                    <p><strong>Coding Insight:</strong> Say goodbye to specificity wars! CSS Cascading Layers let you organize styles in a hierarchy, controlling which rules win without <code>!</code>important</code> hacks or complex selectors.</p>
+                    <p><em>Define layers once at the top of your stylesheet. Styles declared earlier have lower priority by default — perfect for establishing design systems over component overrides.</em></p>
+                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code>/* 1️⃣ Declare layer hierarchy (higher priority = right) */
+@layer reset, base, components, utilities;
 
-// Send data to process
-worker.postMessage({ task: 'processImage', url: imageSrc });
+/* 2️⃣ Apply styles within layers */
+@layer reset {
+  * { box-sizing: border-box; margin: 0; }
+}
 
-// Receive results when done
-worker.onmessage = (e) => {
-  console.log('Processed:', e.data);
-};
+@layer components {
+  .btn { padding: 1rem; background: blue; color: white; }
+}
 
-// worker.js — runs in separate thread
-self.onmessage = (e) => {
-  const result = heavyComputation(e.data.url);
-  self.postMessage(result); // send back to main
-};</code></pre>
-                    <p><strong>Pro Tip:</strong> Use <code>SharedArrayBuffer</code> for zero-copy data sharing between threads, and try libraries like <a href="https://parallel-threading.github.io/" target="_blank">Parallelizing JavaScript</a> or native browser support in modern environments!</p>
+/* This overrides @layer components without !important */
+.btn.danger { background: red; }</code></pre>
+                    <p><strong>Pro Tip:</strong> Unlayered styles (like .btn.danger above) always beat layered ones! Use this intentionally — base frameworks in layers, custom tweaks outside them. Browser support is excellent since 2021!</p>
                 </div>
                 <div class="timestamp">Last sync: <span id="last-sync">Just now</span></div>
             </div>
