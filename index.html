@@ -60,31 +60,41 @@
             </div>
             <div class="update-container">
                 <div id="dynamic-content" class="dynamic-card">
-                    <!-- Content injected by OpenClaw -- Updated: 2026-07-01 13:54 UTC -->
-                    <h3>🔗 Rust's Borrow Checker</h3>
-                    <p><strong>Tech Insight:</strong> Memory safety without garbage collection! Rust's borrow checker enforces rules at compile-time: you can have either one mutable reference OR any number of immutable references to data. This prevents data races and use-after-free bugs before your code even runs.</p>
-                    <p><em>The compiler is your partner, not adversary — it forces you to think clearly about ownership transfers (the "move" semantics) and borrowing lifetimes. Once you internalize the model, writing safe concurrent code becomes natural rather than accidental.</em></p>
-                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code>// 🚫 This WON'T compile (mutable + immutable borrow)
-let mut data = Vec::new();
-let immut_ref = &data;      // Immutable borrow
-*immut_ref.push(42);        // ERROR: cannot mutate while borrowed!
+                    <!-- Content injected by OpenClaw -- Updated: 2026-07-01 15:00 UTC -->
+                    <h3>🧠 Python Generators & Memory Efficiency</h3>
+                    <p><strong>Tech Insight:</strong> Process infinite data streams with constant memory! Python generators use the <code>yield</code> keyword to create iterators that produce values on-demand, rather than loading everything into RAM at once. This is crucial for handling large datasets, streaming APIs, or even truly infinite sequences.</p>
+                    <p><em>Generators are lazy by design — they don't compute anything until you ask for the next value. The generator maintains its own internal state (local variables, execution point) between yields, giving you a function that "remembers" where it left off without explicit class machinery.</em></p>
+                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code># 🚫 BAD: Loads entire file into memory (OOM risk!)
+def read_lines_bad(filepath):
+    with open(filepath) as f:
+        return f.readlines()  # All lines in RAM at once!
 
-// ✅ Correct pattern: scope borrows explicitly
-{
-    let mut mutable_ref = &mut data;
-    mutable_ref.push(1);
-    mutable_ref.push(2);
-}  // Mutable borrow ends here — lifetimes are explicit
-let immut_iter = data.iter();
-for item in immut_iter {
-    println!("{}", item);   // Safe: only immutable access now
-}
+# ✅ GOOD: Generator yields one line at a time
+def read_lines_good(filepath):
+    with open(filepath) as f:
+        for line in f:           # File iterator = lazy by default
+            yield line.strip()   # Pause, return value, resume later
 
-// 🎯 Ownership transfer (move semantics)
-fn process_string(s: String) {  // Takes ownership — caller can't use s anymore
-    s.push_str("!");
-}</code></pre>
-                    <p><strong>Pro Tip:</strong> When the borrow checker rejects your code, read it as feedback about lifetime boundaries you didn't consciously define. Try narrowing scopes with `{ }` blocks to end borrows earlier, or clone just when necessary (Rust's <code>Clone</code> trait is explicit by design).</p>
+# Usage: O(1) memory regardless of file size!
+for line in read_lines_good("huge.log"):
+    if "ERROR" in line:
+        print(line)
+
+# 🎯 Infinite sequence example (Fibonacci):
+def fibonacci():
+    a, b = 0, 1
+    while True:                 # Never ends!
+        yield a                  # Returns value, pauses here
+        a, b = b, a + b          # State preserved between calls
+
+fib = fibonacci()
+print(next(fib))  # 0 — generator starts
+print(next(fib))  # 1 — resumes where it left off
+print(next(fib))  # 1 — state (a=1,b=1) restored automatically
+from itertools import islice    # Take first 10 without loop:
+print(list(islice(fibonacci(), 10)))
+# [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]</code></pre>
+                    <p><strong>Pro Tip:</strong> Generator expressions are even shorter: <code>(x*x for x in range(1000000))</code> vs list comp <code>[x*x for ...]</code>. The generator uses negligible memory; the list consumes megabytes. Use <code>itertools.islice()</code>, <code>chain()</code>, and <code>zip_longest()</code> to compose generators into powerful pipelines that never materialize intermediate collections.</p>
                 </div>
                 <div class="timestamp">Last sync: <span id="last-sync">Just now</span></div>
             </div>
