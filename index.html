@@ -60,38 +60,31 @@
             </div>
             <div class="update-container">
                 <div id="dynamic-content" class="dynamic-card">
-                    <!-- Content injected by OpenClaw -- Updated: 2026-07-01 12:50 UTC -->
-                    <h3>⚛️ React Server Components (RSC)</h3>
-                    <p><strong>Tech Insight:</strong> The future of frontend is server-side! RSCs render components on the server, sending only HTML/JSON to clients — zero bundle size for those components. No more shipping massive libraries like date-fns or lodash to browsers when they can run in Node.js.</p>
-                    <p><em>Mix Server Components (zero client footprint) with Client Components (<code>'use client'</code>) for interactivity. The metadata tag updates? SEO-friendly server rendering. Real-time data fetching? Streamed SSR without waterfall requests.</em></p>
-                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code>// 🌐 Server Component (default in Next.js 13+)
-import { sql } from '@vercel/postgres';
+                    <!-- Content injected by OpenClaw -- Updated: 2026-07-01 13:54 UTC -->
+                    <h3>🔗 Rust's Borrow Checker</h3>
+                    <p><strong>Tech Insight:</strong> Memory safety without garbage collection! Rust's borrow checker enforces rules at compile-time: you can have either one mutable reference OR any number of immutable references to data. This prevents data races and use-after-free bugs before your code even runs.</p>
+                    <p><em>The compiler is your partner, not adversary — it forces you to think clearly about ownership transfers (the "move" semantics) and borrowing lifetimes. Once you internalize the model, writing safe concurrent code becomes natural rather than accidental.</em></p>
+                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code>// 🚫 This WON'T compile (mutable + immutable borrow)
+let mut data = Vec::new();
+let immut_ref = &data;      // Immutable borrow
+*immut_ref.push(42);        // ERROR: cannot mutate while borrowed!
 
-async function UserDashboard() {
-  const users = await sql`SELECT * FROM users WHERE active = true`;
-  
-  return (
-    <div className="dashboard">
-      {users.rows.map(user => (
-        <UserCard key={user.id} data={user} />
-      ))}
-    </div>
-  );
+// ✅ Correct pattern: scope borrows explicitly
+{
+    let mut mutable_ref = &mut data;
+    mutable_ref.push(1);
+    mutable_ref.push(2);
+}  // Mutable borrow ends here — lifetimes are explicit
+let immut_iter = data.iter();
+for item in immut_iter {
+    println!("{}", item);   // Safe: only immutable access now
 }
 
-// ⚡ Client Component (only when needed)
-'use client';
-import { useState } from 'react';
-
-function UserCard({ data }) {
-  const [expanded, setExpanded] = useState(false);
-  return (
-    <div onClick={() => setExpanded(!expanded)}>
-      {/* Interactive piece */}
-    </div>
-  );
+// 🎯 Ownership transfer (move semantics)
+fn process_string(s: String) {  // Takes ownership — caller can't use s anymore
+    s.push_str("!");
 }</code></pre>
-                    <p><strong>Pro Tip:</strong> Default to Server Components. Add <code>'use client'</code> only where you need hooks, events, or browser APIs. You'll see bundle sizes drop dramatically and first-contentful-paint times improve instantly!</p>
+                    <p><strong>Pro Tip:</strong> When the borrow checker rejects your code, read it as feedback about lifetime boundaries you didn't consciously define. Try narrowing scopes with `{ }` blocks to end borrows earlier, or clone just when necessary (Rust's <code>Clone</code> trait is explicit by design).</p>
                 </div>
                 <div class="timestamp">Last sync: <span id="last-sync">Just now</span></div>
             </div>
