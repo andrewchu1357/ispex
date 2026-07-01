@@ -60,49 +60,63 @@
             </div>
             <div class="update-container">
                 <div id="dynamic-content" class="dynamic-card">
-                    <!-- Content injected by OpenClaw -- Updated: 2026-07-01 18:39 UTC -->
-                    <h3>⚡ WebAssembly & Near-Native Performance in the Browser</h3>
-                    <p><strong>Tech Insight:</strong> Break free from JavaScript's interpreter overhead! WebAssembly (Wasm) compiles to binary bytecode that executes at near-native speed — perfect for compute-heavy tasks like image processing, cryptography, game engines, and AI inference. Modern frameworks compile C++, Rust, Zig, even Go directly into Wasm modules.</p>
-                    <p><em>The magic: LLVM optimizes your code across module boundaries with whole-program analysis (LTO), enabling aggressive optimizations impossible in JIT environments. Combine SIMD instructions for parallel computation — one instruction processes 8 integers or 4 floats simultaneously. Real-world apps like Figma, AutoCAD Web, and VS Code's Wasm-based extensions achieve native-grade performance entirely client-side.</em></p>
-                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code>// 🚫 SLOW: JavaScript-heavy image processing
-function blurImageJS(pixels, kernel) {
-  // Pure JS loops over millions of pixels — painfully slow!
-  const result = new Uint8ClampedArray(pixels.length);
-  for (let y = 0; y < height; y++) {  // O(n²) in pure JS
-    for (let x = 0; x < width; x++) {
-      let r=0, g=0, b=0;
-      for (let ky=-1; ky<=1; ky++)
-        for (let kx=-1; kx<=1; kx++) {
-          const idx = ((y+ky)*width + (x+kx)) * 4;
-          r += pixels[idx]   * kernel[ky][kx];
-          g += pixels[idx+1] * kernel[ky][kx];
-          b += pixels[idx+2] * kernel[ky][kx];
-        }
-      result[pos++] = r/9;  // Average blur
+                    <!-- Content injected by OpenClaw -- Updated: 2026-07-01 19:10 UTC -->
+                    <h3>🔄 GraphQL Subscriptions & Real-Time Data Streams</h3>
+                    <p><strong>Tech Insight:</strong> Move beyond polling! GraphQL subscriptions leverage WebSockets to push real-time updates from server to client — think live chat, collaborative editing, stock tickers, and IoT dashboards. Unlike REST's request-response model or even periodic polling (wasteful & delayed), subscriptions establish a persistent bidirectional channel where the server <em>pushes</em> data exactly when it changes.</p>
+                    <p><em>The architecture: Your GraphQL server subscribes to data sources (Postgres LISTEN/NOTIFY, Redis PubSub, Kafka topics) and relays events through WebSocket connections. Each client maintains a subscription query, and the server uses event-driven backends + connection batching to deliver updates with millisecond latency — even at scale.</em></p>
+                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code># 🚫 OLD WAY: Polling every 3 seconds (wasteful, delayed)
+const pollForUpdates = async () => {
+  while (true) {
+    const data = await fetch('/api/chat-messages'); // HTTP request
+    renderMessages(data);
+    await sleep(3000); // ⏱️ Max 3-second delay! Missed real-time.
+  }
+};
+// ❌ Issues: Server load from empty polls, stale UI state,
+//     bandwidth waste when nothing changes.
+
+# ✅ NEW WAY: GraphQL Subscription (real-time push)
+import { useSubscription } from '@apollo/client';
+import { gql } from '@apollo/client';
+
+const NEW_MESSAGE_SUB = gql`
+  subscription OnNewMessage($chatId: ID!) {
+    messageAdded(chatId: $chatId) {
+      id
+      sender { name avatar }
+      content
+      timestamp
+      reactions { emoji userId }
     }
   }
-}
-// ⏱️ ~300-500ms for a 1MP image in Chrome's JIT!
+`;
 
-// ✅ FAST: Rust → WebAssembly with SIMD acceleration
-cargo build --target wasm32-wasmi --release --features simd # Compiles to optimized Wasm
-<script type="module">
-import init, { blurImageWASM } from './wasm-image-processor.js';
-await init();  // Load and instantiate the compiled .wasm binary
-const result = await blurImageWASM(pixels); 
-</script>
-// ⚡ ~8-12ms for a 1MP image — nearly native speed!
-// SIMD processes multiple pixels in parallel registers.
-
-# 🎯 Rust code (Rust is the easiest path to Wasm):
-cargo install wasm-pack # Toolchain: rustc → LLVM optimizes → .wasm output
-#[cfg(target_arch = "wasm32")]
-pub fn process_image(data: &[u8], kernel_size: usize) -> Vec<u8> {
-  let simd_width = std::simd::num_elements::<f64>();
-  // CPU-specific instructions auto-vectorized for your platform
+function ChatWindow({ chatId }) {
+  const { data } = useSubscription(NEW_MESSAGE_SUB, {
+    variables: { chatId },
+    onSubscribe: (data) => updateUI(data), // ⚡ Instant!
+  });
 }
-cargo build --release # LLVM's LTO kicks in, optimizing across modules!</code></pre>
-                    <p><strong>Pro Tip:</strong> Use Emscripten or wasm-pack toolchains to compile C/C++/Rust directly. Wasm Garbage Collection (GC) is now standardized — enabling TypeScript-to-Wasm via SWC and Kotlin/WASM compilation for complex app porting without manual memory management! For ultra-low latency, explore WebGPU's compute shaders running alongside your Wasm modules — GPU + CPU parallelism unlocking full-stack browser performance.</p>
+// ✅ Benefits: Zero polling overhead, sub-100ms latency,
+//             scales efficiently — one connection per client.
+
+# 🔧 Server-side (Node.js + Apollo Server + Postgres):
+import { PubSub } from 'graphql-subscriptions'; // Or Redis for cluster
+class ChatServer {
+  async messageAdded(chatId, payload) {
+    await db.query('INSERT INTO messages ...');
+    pubPub.publish(`CHAT_${chatId}_MESSAGE`, { messageAdded: payload });
+    // WebSocket clients auto-receive update via subscription!
+  }
+}
+
+# 🌐 Production-scale with Redis PubSub:
+const redis = new IORedis();
+pubsub.subscribe(redis, ['NEW_MESSAGE']);
+apolloServer.listen({ port: 4000 }, () => {
+  // WebSocket upgrades to /graphql endpoint automatically.
+});</code></pre>
+                    <p><strong>Pro Tip:</strong> For massive scale (10k+ concurrent subscriptions), use a distributed pubsub backend like Redis Cluster or NATS, not in-memory GraphQL PubSub. Add heartbeat/ping-pong logic per WebSocket spec to handle dead connections auto-cleanup. Combine with Apollo Federation for microservices — each service publishes domain-specific events and federation gateway aggregates subscription streams into unified client queries!</p>
                 </div>
                 <div class="timestamp">Last sync: <span id="last-sync">Just now</span></div>
             </div>
