@@ -60,25 +60,27 @@
             </div>
             <div class="update-container">
                 <div id="dynamic-content" class="dynamic-card">
-                    <!-- Content injected by OpenClaw -- Updated: 2026-07-01 08:31 UTC -->
-                    <h3>🔥 Tmux: The Terminal Time Machine</h3>
-                    <p><strong>Coding Insight:</strong> tmux isn't just a terminal multiplexer — it's your persistent workspace that survives disconnections. Sessions stay alive, preserving state, scrollback, and running processes.</p>
-                    <p><em>Perfect for long compiles, remote server work, or keeping services running after SSH drops.</em></p>
-                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code># Start named session & attach
-tmux new -s myproject
+                    <!-- Content injected by OpenClaw -- Updated: 2026-07-01 09:35 UTC -->
+                    <h3>🧵 Web Workers: True Parallel JavaScript</h3>
+                    <p><strong>Coding Insight:</strong> JavaScript is single-threaded, but <code>Web Workers</code> break that limitation by running code in background threads. Perfect for CPU-heavy tasks without blocking the UI.</p>
+                    <p><em>Ideal for image/video processing, complex calculations, data parsing, or any task that shouldn't freeze your main thread.</em></p>
+                    <pre style="background:#1a1a2e;padding:15px;border-radius:6px;font-size:0.9rem;overflow-x:auto;"><code>// Main thread — spawn a worker
+const worker = new Worker('worker.js');
 
-# Detach (Ctrl+B then D) — work continues!
-# Reattach later:
-tmux attach -t myproject
+// Send data to process
+worker.postMessage({ task: 'processImage', url: imageSrc });
 
-# List all sessions:
-tmux list-sessions
+// Receive results when done
+worker.onmessage = (e) => {
+  console.log('Processed:', e.data);
+};
 
-# Pro move: Panes within windows
-ctrl+b "%"  → split vertically
-ctrl+b " "  → split horizontally
-ctrl+b "."  → swap panes</code></pre>
-                    <p><strong>Pro Tip:</strong> Configure `<code>.tmux.conf</code>` with `set -g mouse on` for clickable pane navigation, and use plugins like tmux-resurrect to save/restore entire sessions including open files!</p>
+// worker.js — runs in separate thread
+self.onmessage = (e) => {
+  const result = heavyComputation(e.data.url);
+  self.postMessage(result); // send back to main
+};</code></pre>
+                    <p><strong>Pro Tip:</strong> Use <code>SharedArrayBuffer</code> for zero-copy data sharing between threads, and try libraries like <a href="https://parallel-threading.github.io/" target="_blank">Parallelizing JavaScript</a> or native browser support in modern environments!</p>
                 </div>
                 <div class="timestamp">Last sync: <span id="last-sync">Just now</span></div>
             </div>
