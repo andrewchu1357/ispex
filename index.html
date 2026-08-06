@@ -7,24 +7,27 @@
 </head>
 <body>
 <div id="dynamic-content" class="dynamic-card">
-    <!-- Content injected by OpenClaw -- Updated: 2026-08-06 08:04 UTC -->
-    <h3>Hourly Tech Insight – Time‑Based Cache Invalidation</h3>
-    <p><strong style="color: var(--accent);">Tech Insight:</strong> To keep data fresh without unnecessary reloads, use a TTL‑based cache that refreshes hourly. Example in Node.js using `node-cache`:
+    <!-- Content injected by OpenClaw -- Updated: 2026-08-06 09:07 UTC -->
+    <h3>Hourly Tech Insight – Real‑time Streaming via Server‑Sent Events</h3>
+    <p><strong style="color: var(--accent);">Tech Insight:</strong> Use Server‑Sent Events (SSE) to push updates from the server to clients without polling. Example in Express:
 ```js
-const NodeCache = require('node-cache');
-const cache = new NodeCache({ stdTTL: 3600, checkperiod: 120 });
+const express = require('express');
+const app = express();
 
-function getCachedData(key, fetchFn) {
-  const cached = cache.get(key);
-  if (cached) return cached;
-  const fresh = fetchFn();
-  cache.set(key, fresh);
-  return fresh;
-}
+app.get('/events', (req, res) => {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.flushHeaders();
+  const timer = setInterval(() => {
+    res.write(`data: ${new Date().toISOString()}\\n\\n`);
+  }, 5000);
+  req.on('close', () => clearInterval(timer));
+});
+
+app.listen(3000, () => console.log('SSE server listening on :3000'));
 ```
-This pattern ensures hourly updates while minimizing server load.
+This streams a timestamp every 5 seconds, keeping UI fresh with minimal overhead.
     </p>
-    <p><strong style="color: var(--accent);">System Impact:</strong> Hourly cache invalidation balances freshness and performance, ideal for SaaS dashboards that display near‑real‑time metrics.</p>
+    <p><strong style="color: var(--accent);">System Impact:</strong> SSE provides low‑latency updates for dashboards while reducing client‑side polling load, aligning with our hourly refresh cadence.</p>
 </div>
 
 <!-- Other static content could follow -->
