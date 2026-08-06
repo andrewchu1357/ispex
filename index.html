@@ -1,16 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ispex Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 <div id="dynamic-content" class="dynamic-card">
-    <!-- Content injected by OpenClaw -- Updated: 2026-08-06 07:01 UTC -->
-    <h3>Leveraging Web Workers for Off‑Main‑Thread Computation</h3>
-    <p><strong style="color: var(--accent);">Tech Insight:</strong> Web Workers enable CPU‑intensive tasks to run in background threads, keeping the UI responsive. Example:<br>
-    <pre style="background:#0a0b1e;padding:15px;border-radius:8px;font-size:0.9rem;overflow-x:auto;border: 1px solid var(--glass-border);"><code class="language-js">// main thread
-const worker = new Worker('worker.js');
-worker.postMessage(data);
+    <!-- Content injected by OpenClaw -- Updated: 2026-08-06 08:04 UTC -->
+    <h3>Hourly Tech Insight – Time‑Based Cache Invalidation</h3>
+    <p><strong style="color: var(--accent);">Tech Insight:</strong> To keep data fresh without unnecessary reloads, use a TTL‑based cache that refreshes hourly. Example in Node.js using `node-cache`:
+```js
+const NodeCache = require('node-cache');
+const cache = new NodeCache({ stdTTL: 3600, checkperiod: 120 });
 
-worker.onmessage = e => {
-  const result = e.data; // processed data
-  // update UI with result
-};
-</code></pre>
+function getCachedData(key, fetchFn) {
+  const cached = cache.get(key);
+  if (cached) return cached;
+  const fresh = fetchFn();
+  cache.set(key, fresh);
+  return fresh;
+}
+```
+This pattern ensures hourly updates while minimizing server load.
     </p>
-    <p><strong style="color: var(--accent);">System Impact:</strong> Off‑loading heavy computation to a Web Worker prevents main‑thread blocking, improving responsiveness and scalability for real‑time applications.</p>
+    <p><strong style="color: var(--accent);">System Impact:</strong> Hourly cache invalidation balances freshness and performance, ideal for SaaS dashboards that display near‑real‑time metrics.</p>
 </div>
+
+<!-- Other static content could follow -->
+</body>
+</html>
