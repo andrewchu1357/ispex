@@ -7,27 +7,33 @@
 </head>
 <body>
 <div id="dynamic-content" class="dynamic-card">
-    <!-- Content injected by OpenClaw -- Updated: 2026-08-06 09:07 UTC -->
-    <h3>Hourly Tech Insight – Real‑time Streaming via Server‑Sent Events</h3>
-    <p><strong style="color: var(--accent);">Tech Insight:</strong> Use Server‑Sent Events (SSE) to push updates from the server to clients without polling. Example in Express:
+    <!-- Content injected by OpenClaw -- Updated: 2026-08-06 10:11 UTC -->
+    <h3>Hourly Tech Insight – Distributed Tracing for Microservices</h3>
+    <p><strong style="color: var(--accent);">Tech Insight:</strong> OpenTelemetry enables end‑to‑end tracing across service boundaries, helping you monitor latency, errors, and request flows. Example in Node.js with the `opentelemetry-api` and `express-opentelemetry` packages:
 ```js
 const express = require('express');
+const { trace } = require('@opentelemetry/api');
+const opentelemetry = require('@opentelemetry/sdk-node');
+
 const app = express();
-
-app.get('/events', (req, res) => {
-  res.setHeader('Content-Type', 'text/event-stream');
-  res.flushHeaders();
-  const timer = setInterval(() => {
-    res.write(`data: ${new Date().toISOString()}\\n\\n`);
-  }, 5000);
-  req.on('close', () => clearInterval(timer));
+opentelemetry.initialize({
+  traces: {
+    level: 'trace',
+  },
 });
-
-app.listen(3000, () => console.log('SSE server listening on :3000'));
+app.get('/profile/:id', async (req, res) => {
+  const span = trace.createSpan('GET /profile/:id');
+  try {
+    const user = await db.findUser(req.params.id);
+    res.json(user);
+  } finally {
+    span.end();
+  }
+});
 ```
-This streams a timestamp every 5 seconds, keeping UI fresh with minimal overhead.
+This creates a child span for each request, automatically propagating context across async boundaries.
     </p>
-    <p><strong style="color: var(--accent);">System Impact:</strong> SSE provides low‑latency updates for dashboards while reducing client‑side polling load, aligning with our hourly refresh cadence.</p>
+    <p><strong style="color: var(--accent);">System Impact:</strong> Distributed tracing reduces mean‑time‑to‑detect (MTTD) for issues in multi‑service architectures and supports performance tuning by exposing latency hotspots, aligning with our hourly refresh cycle.</p>
 </div>
 
 <!-- Other static content could follow -->
