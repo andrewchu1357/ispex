@@ -7,9 +7,25 @@
 </head>
 <body>
 <div id="dynamic-content">
-Fresh tech insight (UTC 2026-08-06 11:15):<br>
-Optimize queries with covering indexes.<br>
-<code>SELECT * FROM orders WHERE created_at > NOW() - INTERVAL '1 day';</code>
-</div>
+🚀 Hourly Tech Insight – Edge Functions for Real‑Time Personalization (UTC 2026-08-06T12:18Z)<br>
+Edge functions execute code at the network edge, delivering low‑latency, personalized responses.<br>
+<br>
+<code>addEventListener('fetch', e => { e.respondWith(handleRequest(e.request)); });
+ async function handleRequest(req) {
+  const url = new URL(req.url);
+  if (url.pathname === '/profile') {
+    const id = url.searchParams.get('id');
+    const user = await getUserFromKV(id);
+    return new Response(JSON.stringify(user), { headers: {'Content-Type':'application/json'} });
+  }
+  return new Response('Not found', {status:404});
+}
+ async function getUserFromKV(id) {
+  const cached = await caches.default.get(`user:${id}`);
+  return cached ? JSON.parse(cached) : await fetchUserFromDB(id);
+}
+</code>
+<br>
+*Updated automatically each hour to keep content fresh.*</div>
 </body>
 </html>
