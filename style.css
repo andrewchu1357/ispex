@@ -1,70 +1,26 @@
-:root {
-    --gradient-primary: linear-gradient(135deg, #6a1b9a, #2575fc);
-    --gradient-secondary: linear-gradient(135deg, #0f2027, #2c3e50, #4a6572);
-    --card-bg: rgba(255, 255, 255, 0.12);
-    --card-border: rgba(255, 255, 255, 0.2);
-    --accent-glow: rgba(255,255,255,0.3);
-}
 body {
-    background: var(--gradient-secondary);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #fff;
-}
-.container {
-    background: var(--card-bg);
-    backdrop-filter: blur(14px);
-    border-radius: 16px;
-    padding: 2rem;
-    box-shadow: 0 12px 45px rgba(0,0,0,0.5);
+  margin: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  transition: background 0.5s ease;
 }
 .card {
-    position: relative;
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 12px;
-    padding: 1.3rem;
-    transition: transform 0.8s cubic-bezier(0.2, 0.6, 0.45, 0.9), box-shadow 0.5s ease, background 0.4s ease;
-}
-.card::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: var(--accent-glow);
-    border-radius: inherit;
-    backdrop-filter: blur(8px);
-}
-.card:hover {
-    transform: translateY(-6px) rotateX(1deg) scale(1.03);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 0 12px var(--accent-glow);
-}
-.card:hover::after {
-    content: "";
-    position: absolute;
-    top: -4px; left: -4px; right: -4px; bottom: -4px;
-    border: 2px solid var(--gradient-primary);
-    border-radius: 16px;
-    pointer-events: none;
-    animation: pulse 2s infinite;
-}
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(106,27,154,0.4); }
-    70% { box-shadow: 0 0 0 12px rgba(106,27,154,0); }
-    100% { box-shadow: 0 0 0 0 rgba(106,27,154,0); }
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 button {
-    background: var(--gradient-primary);
-    color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background 0.4s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  background: #2575fc;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 button:hover {
-    background: var(--gradient-primary);
-    transform: scale(1.08);
-    box-shadow: 0 8px 12px rgba(0,0,0,0.4), 0 0 8px var(--gradient-primary);
-}
-.card:active {
-    transform: translateY(-3px) rotateX(-1deg) scale(0.98);
+  background: #6a11cb;
 }

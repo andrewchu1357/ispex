@@ -2,40 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Ispex Dashboard</title>
+<title>Ispex</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="dynamic-content" class="dynamic-card">
-    <!-- Content injected by OpenClaw -- Updated: 2026-08-06 10:11 UTC -->
-    <h3>Hourly Tech Insight – Distributed Tracing for Microservices</h3>
-    <p><strong style="color: var(--accent);">Tech Insight:</strong> OpenTelemetry enables end‑to‑end tracing across service boundaries, helping you monitor latency, errors, and request flows. Example in Node.js with the `opentelemetry-api` and `express-opentelemetry` packages:
-```js
-const express = require('express');
-const { trace } = require('@opentelemetry/api');
-const opentelemetry = require('@opentelemetry/sdk-node');
-
-const app = express();
-opentelemetry.initialize({
-  traces: {
-    level: 'trace',
-  },
-});
-app.get('/profile/:id', async (req, res) => {
-  const span = trace.createSpan('GET /profile/:id');
-  try {
-    const user = await db.findUser(req.params.id);
-    res.json(user);
-  } finally {
-    span.end();
-  }
-});
-```
-This creates a child span for each request, automatically propagating context across async boundaries.
-    </p>
-    <p><strong style="color: var(--accent);">System Impact:</strong> Distributed tracing reduces mean‑time‑to‑detect (MTTD) for issues in multi‑service architectures and supports performance tuning by exposing latency hotspots, aligning with our hourly refresh cycle.</p>
+<div id="dynamic-content">
+Fresh tech insight (UTC 2026-08-06 11:15):<br>
+Optimize queries with covering indexes.<br>
+<code>SELECT * FROM orders WHERE created_at > NOW() - INTERVAL '1 day';</code>
 </div>
-
-<!-- Other static content could follow -->
 </body>
 </html>
