@@ -1,10 +1,10 @@
 /* Base Styles */
 :root {
-    --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    --bg-gradient: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
     --glass-bg: rgba(255, 255, 255, 0.03);
     --glass-border: rgba(255, 255, 255, 0.1);
-    --accent: #60a5fa;   /* Updated */
-    --accent-secondary: #9370db; /* Updated */
+    --accent: #3b82f6;   /* Updated */
+    --accent-secondary: #10b981; /* Updated */
     --text-main: #f8fafc;
 }
 
@@ -16,7 +16,7 @@
     padding: 2rem;
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-    transition: transform 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.4s ease, border-color 0.4s ease; /* slight tweak */
     position: relative; /* for ::after */
 }
 .dynamic-card::after {
@@ -24,8 +24,8 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: radial-gradient(circle at center, rgba(96,165,250,0.15) 0%, transparent 70%);
-    animation: glow-pulse 4s infinite alternate;
+    background: radial-gradient(circle at center, rgba(59,130,246,0.12) 0%, transparent 70%); /* updated glow color */
+    animation: glow-pulse 6s infinite alternate; /* longer pulse */
 }
 .dynamic-card:hover {
     border-color: var(--accent);
