@@ -1,36 +1,42 @@
+:root {
+    --gradient-primary: linear-gradient(45deg, #ff6a00, #ee0979);
+    --gradient-secondary: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    --card-bg: rgba(255, 255, 255, 0.15);
+    --card-border: rgba(255, 255, 255, 0.3);
+}
 body {
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    background: var(--gradient-secondary);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #fff;
 }
 .container {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border-radius: 14px;
     padding: 2rem;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    box-shadow: 0 10px 35px rgba(0,0,0,0.45);
 }
 .card {
-    background: rgba(255,255,255,0.2);
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 8px;
-    padding: 1rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 1.2rem;
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease;
 }
 .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 20px rgba(0,0,0,0.5);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 16px 30px rgba(0,0,0,0.6);
 }
 button {
-    background: linear-gradient(45deg, #ff6a00, #ee0979);
+    background: var(--gradient-primary);
     color: white;
     border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 6px;
+    padding: 0.7rem 1.4rem;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
+    transition: background 0.35s ease, transform 0.2s ease;
 }
 button:hover {
-    background: linear-gradient(45deg, #ff8c00, #d9007a);
-    transform: scale(1.05);
+    background: var(--gradient-primary);
+    transform: scale(1.06);
 }

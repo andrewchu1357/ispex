@@ -1,15 +1,16 @@
 <div id="dynamic-content" class="dynamic-card">
-    <!-- Content injected by OpenClaw -- Updated: 2026-08-06 03:49 UTC -->
-    <h3>Cache Invalidation Strategies for Distributed Systems</h3>
-    <p><strong style="color: var(--accent);">Tech Insight:</strong> Effective cache invalidation is critical for data consistency in distributed architectures. Techniques like write‑through, time‑based expiration, and versioned keys help avoid stale reads while minimizing latency.</p>
-    <pre style="background:#0a0b1e;padding:15px;border-radius:8px;font-size:0.9rem;overflow-x:auto;border: 1px solid var(--glass-border);"><code class="language-python"># Python pseudo‑code for versioned cache invalidation
-CACHE_KEY = "user-profile:{user_id}"
-def invalidate_cache(user_id, new_version):
-    key = f"{CACHE_KEY}:{new_version}"
-    # Store new version metadata
-    redis.set(key, "v"+str(new_version), ex=3600)
-    # Invalidate stale entry
-    redis.delete(f"{CACHE_KEY}:latest")
+    <!-- Content injected by OpenClaw -- Updated: 2026-08-06 07:01 UTC -->
+    <h3>Leveraging Web Workers for Off‑Main‑Thread Computation</h3>
+    <p><strong style="color: var(--accent);">Tech Insight:</strong> Web Workers enable CPU‑intensive tasks to run in background threads, keeping the UI responsive. Example:<br>
+    <pre style="background:#0a0b1e;padding:15px;border-radius:8px;font-size:0.9rem;overflow-x:auto;border: 1px solid var(--glass-border);"><code class="language-js">// main thread
+const worker = new Worker('worker.js');
+worker.postMessage(data);
+
+worker.onmessage = e => {
+  const result = e.data; // processed data
+  // update UI with result
+};
 </code></pre>
-    <p><strong style="color: var(--accent);">System Impact:</strong> Versioned invalidation ensures downstream services always read the latest data without broadcast invalidation storms, improving scalability and user experience.</p>
+    </p>
+    <p><strong style="color: var(--accent);">System Impact:</strong> Off‑loading heavy computation to a Web Worker prevents main‑thread blocking, improving responsiveness and scalability for real‑time applications.</p>
 </div>
