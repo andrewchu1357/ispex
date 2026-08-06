@@ -1,0 +1,34 @@
+## Concurrency in Modern Systems
+
+**Problem**: CPU‑bound tasks block the main thread, limiting responsiveness and throughput.
+
+**Solution**: Use asynchronous I/O with Python’s `asyncio` library.
+
+```python
+import asyncio
+
+async def fetch_data(url):
+    # Simulate network request without blocking
+    await asyncio.sleep(1)
+    return f"Data from {url}"
+
+async def main():
+    tasks = [
+        fetch_data("https://api.example.com/first"),
+        fetch_data("https://api.example.com/second")
+    ]
+    results = await asyncio.gather(*tasks)  # Run concurrently
+    for r in results:
+        print(r)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+**Key Takeaways**
+- `await` yields control, allowing other coroutines to execute.
+- Scales to thousands of I/O‑bound tasks with minimal threads.
+- For CPU‑intensive work, combine `asyncio` with `multiprocessing` or use Rust’s async runtime.
+- Async patterns improve system utilization and latency without heavy infrastructure.
+
+**Practical Tip**: Wrap blocking calls (e.g., file I/O, external APIs) in `run_in_executor` for true non‑blocking behavior.
